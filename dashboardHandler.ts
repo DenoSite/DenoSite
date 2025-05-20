@@ -1,7 +1,6 @@
 
 import { getCookies } from "https://deno.land/std@0.201.0/http/cookie.ts";
 import { isValidSession } from "./sessionHandler.ts";
-import db from "./database.ts";
 
 export async function handleDashboard(req: Request): Promise<Response> {
     
@@ -17,18 +16,42 @@ export async function handleDashboard(req: Request): Promise<Response> {
 
         console.log("dashboardHandler.ts : handleDashboard - valid session token:", token);
 
+        //tester den lokale KV database//////////////////////////////
+        const kv = await Deno.openKv();
 
-        // Læs brugere fra databasen
-        const users = [...db.query("SELECT name FROM users")];
+        const counterKey = ["counter"];
+        const currentValue = (await kv.get(counterKey)).value ?? 0;
+        const current = typeof currentValue === "number" ? currentValue : 0;
 
-        // Lav HTML til listen
-        const userListHTML = users.map(([name]) => `<li>${name}</li>`).join("");
+        // Forøg med 1
+        const newCount = current + 1;
 
+        console.log(newCount)
+
+        // Gem den opdaterede værdi
+        await kv.set(counterKey, newCount);
+
+
+        await kv.set(["token"+ newCount], token);
+
+        const entries = kv.list({ prefix: [] });
+            const items: string[] = [];
+
+        for await (const entry of entries) {
+        // Filtrér kun tokens, hvis du kun vil vise dem
+            if (Array.isArray(entry.key) && typeof entry.key[0] === "string" && entry.key[0].startsWith("token")) {
+                items.push(`<li>${entry.value}</li>`);
+            }
+        }
+
+         const userListHtml = items.join("");
+        ////////////////////////////////////////////////////////////
 
         let html = await Deno.readTextFile("public/dashboard.html");
 
-        // Erstat {{users}} med rigtig HTML
-        html = html.replace("{{users}}", userListHTML);
+        // Erstat {{users}} med genereret liste
+        html = html.replace("{{users}}", userListHtml);
+
 
         return new Response(html, {
             headers: {  "Content-Type": "text/html",
@@ -47,3 +70,5 @@ export async function handleDashboard(req: Request): Promise<Response> {
 
 
 }
+
+

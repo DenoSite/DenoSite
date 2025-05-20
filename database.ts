@@ -1,18 +1,7 @@
-// database.ts
-import { DB } from "https://deno.land/x/sqlite/mod.ts";
+const kv = await Deno.openKv();
 
-const db = new DB("data.db");
+await kv.set(["test"], "lokal data");
 
-// Opret en tabel (kun første gang)
-db.execute(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT
-  );
-`);
+const result = await kv.get(["test"]);
 
-// Tilføj nogle testdata (valgfrit)
-db.query("INSERT INTO users (name) VALUES (?)", ["Alice"]);
-db.query("INSERT INTO users (name) VALUES (?)", ["Bob"]);
-
-export default db;
+console.log("Hentet fra KV:", result.value); // "lokal data"
