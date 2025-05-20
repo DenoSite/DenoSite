@@ -31,6 +31,21 @@ Deno.serve(async (req) => {
     return await handleLogin(req);
   }
 
+
+
+  if (url.pathname === "/Slides_1-1-Presentation.pdf" && req.method === "GET") {
+  
+    
+        const pdf = await Deno.readFile("public/Slides_1-1-Presentation.pdf");
+        return new Response(pdf, {
+            headers: {  "Content-Type": "application/pdf",
+                        "Cache-Control": "no-store",
+             },
+        });
+
+  }
+
+
   // Logout GET
   if (url.pathname === "/logout" && req.method === "GET") {
 
