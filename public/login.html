@@ -5,6 +5,16 @@
   <title>Login Demo</title>
   <link rel="stylesheet" href="styleLogin.css">
 </head>
+
+<script>
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+      // Hvis det er en side fra back-forward-cache, genindlæs
+      window.location.reload();
+    }
+  });
+</script>
+
 <body>
   <form method="POST" action="/login">
     <label for="username">Brugernavn:</label>

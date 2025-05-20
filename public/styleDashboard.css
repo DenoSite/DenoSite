@@ -1,0 +1,16 @@
+/* lav style til tabel så der er god afstand mellem celler , og med kanter også imellem hver celle*/
+table {
+    border-collapse: separate;
+    border-spacing: 10 10px;
+    border: 1px solid #881919;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    background-color: #cddad0;
+}
+td{
+    padding: 10px;
+    border: 1px solid #881919;
+    background-color: #cddad0;
+}

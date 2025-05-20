@@ -3,11 +3,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="styleDashboard.css">
+
 </head>
+
+<script>
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+      // Hvis det er en side fra back-forward-cache, genindlæs
+      window.location.reload();
+    }
+  });
+</script>
+
 <body>
-    velkommen til dashboard
+    <h1>Velkommen til dashboard</h1>
     <button><a href="/profile">profil</a></button>
     <button><a href="/logout">logout</a></button>
+
+
+<!-- lav en tabel med oversigt over grundforløbs undervisningen-->
+
+    <table>
+        <thead>
+            <tr>
+                <th>hold</th>
+                <th>fag</th>
+                <th>info</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="/grundforlob">L2-1GA</a></td>
+                <td>matematik</td>
+                <td>grundforløb</td>
+            </tr>
+            <tr>
+                <td>Uge 2</td>
+                <td>Webudvikling</td>
+                <td>Jane Smith</td>
+            </tr>
+            <!-- Flere rækker kan tilføjes her -->
+        </tbody>
+    </table>
 
 </body>
 </html>

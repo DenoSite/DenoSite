@@ -18,7 +18,12 @@ export async function handleDashboard(req: Request): Promise<Response> {
 
         const html = await Deno.readTextFile("public/dashboard.html");
         return new Response(html, {
-            headers: { "Content-Type": "text/html" },
+            headers: {  "Content-Type": "text/html",
+                        "Cache-Control": "no-store, no-cache, must-revalidate",
+                        "Pragma": "no-cache",
+                        "Expires": "0",
+                        "X-Content-Type-Options": "nosniff",
+             },
         });
 
     }   else {
