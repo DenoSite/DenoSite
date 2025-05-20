@@ -1,6 +1,7 @@
 
 import { getCookies } from "https://deno.land/std@0.201.0/http/cookie.ts";
 import { isValidSession } from "./sessionHandler.ts";
+import db from "./database.ts";
 
 export async function handleDashboard(req: Request): Promise<Response> {
     
@@ -16,7 +17,19 @@ export async function handleDashboard(req: Request): Promise<Response> {
 
         console.log("dashboardHandler.ts : handleDashboard - valid session token:", token);
 
-        const html = await Deno.readTextFile("public/dashboard.html");
+
+        // Læs brugere fra databasen
+        const users = [...db.query("SELECT name FROM users")];
+
+        // Lav HTML til listen
+        const userListHTML = users.map(([name]) => `<li>${name}</li>`).join("");
+
+
+        let html = await Deno.readTextFile("public/dashboard.html");
+
+        // Erstat {{users}} med rigtig HTML
+        html = html.replace("{{users}}", userListHTML);
+
         return new Response(html, {
             headers: {  "Content-Type": "text/html",
                         "Cache-Control": "no-store, no-cache, must-revalidate",
