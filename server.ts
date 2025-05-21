@@ -33,10 +33,12 @@ Deno.serve(async (req) => {
 
 
 
-  if (url.pathname === "/Slides_1-1-Presentation.pdf" && req.method === "GET") {
+  if (req.method === "GET" && url.pathname.endsWith(".pdf")) {
   
+    const filePath = `public${url.pathname}`;
     
-        const pdf = await Deno.readFile("public/Slides_1-1-Presentation.pdf");
+    const pdf = await Deno.readFile(filePath);
+    
         return new Response(pdf, {
             headers: {  "Content-Type": "application/pdf",
                         "Cache-Control": "no-store",
